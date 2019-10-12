@@ -12,6 +12,7 @@ using TopSwagCode.AspNetCore.Beacon.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TopSwagCode.AspNetCore.Beacon.Services;
 
 namespace TopSwagCode.AspNetCore.Beacon
 {
@@ -28,12 +29,13 @@ namespace TopSwagCode.AspNetCore.Beacon
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<IAnalyticsService, AnalyticsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

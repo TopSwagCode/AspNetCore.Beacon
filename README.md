@@ -13,13 +13,13 @@ https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API
 
 # Can I use it?
 
-Yes! :)
+Yes! (Not in IE) :)
 
 https://caniuse.com/#feat=beacon
 
 # Alternatives
 
-Google analytics.
+Google analytics. If you like sharing all your data with your big brother :P (You know he can't keep a secret)
 
 # Further ideas
 

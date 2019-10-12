@@ -9,7 +9,7 @@ namespace TopSwagCode.AspNetCore.Beacon.Services
         Task InsertAnalytics(Analytic analytic);
     }
     
-    public class AnalyticsService
+    public class AnalyticsService : IAnalyticsService
     {
         private readonly ApplicationDbContext _dbContext;
 

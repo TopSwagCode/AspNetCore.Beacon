@@ -38,12 +38,14 @@ namespace TopSwagCode.AspNetCore.Beacon.Controllers
 
             return View(response);
         }
-
+        
         [HttpPost]
         public async Task Post()
         {
             using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
             var json = await reader.ReadToEndAsync();
+            
+            _logger.LogDebug(json);
             
             var beaconRequest = System.Text.Json.JsonSerializer.Deserialize<BeaconRequest>(json);
 
@@ -54,11 +56,14 @@ namespace TopSwagCode.AspNetCore.Beacon.Controllers
                 userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            await _analyticsService.InsertAnalytics(new Analytic());
-            
-            _logger.LogWarning(json);
+            await _analyticsService.InsertAnalytics(new Analytic
+            {
+                State = beaconRequest.State,
+                SessionUid = beaconRequest.SessionUid,
+                UserTime =  beaconRequest.UserTime
+                // Server time?
+            });
         }
-        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
