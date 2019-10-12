@@ -44,8 +44,39 @@
             &copy; 2019 - TopSwagCode.AspNetCore.Beacon - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function getSessionId(){
+        return "000-000-000"; // Get from session cookie or generate new one and save in cookie.
+    }
+    
+    window.onload = window.onunload = function analytics(event) {
+      if (!navigator.sendBeacon) return;
+
+      var url = "/beacon";
+      // Create the data to send
+      //var data = "state=" + event.type + "&location=" + location.href;
+      var data = {
+                "state": event.type,
+                "location": location.href,
+                "sessionId": getSessionId(),
+                "userTime": moment().format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')  // Could use momentJS to get DateTimeOffset
+            };
+      
+      //Issue with CORS and beacons for other content types
+      //https://bugs.chromium.org/p/chromium/issues/detail?id=490015 
+      //var beaconRequest = new Blob([JSON.stringify(data)], {type : 'application/json'});
+      //var status = navigator.sendBeacon(url, beaconRequest);
+      
+      // Send the beacon
+      var status = navigator.sendBeacon(url, JSON.stringify(data));
+
+      // Log the data and result
+      console.log("sendBeacon: URL = ", url, "; data = ", data, "; status = ", status);
+    };
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
