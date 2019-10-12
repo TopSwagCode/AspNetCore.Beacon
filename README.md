@@ -21,4 +21,9 @@ https://caniuse.com/#feat=beacon
 
 Google analytics.
 
-##
+# Further ideas
+
+You could store session cookie with UID and track user from start to end.
+Have a different table to store user identity if user login during their visit, so we can attach the logs to a given state.
+
+

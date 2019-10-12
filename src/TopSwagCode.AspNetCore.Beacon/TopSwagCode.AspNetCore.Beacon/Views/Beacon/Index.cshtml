@@ -1,0 +1,20 @@
+﻿@model TopSwagCode.AspNetCore.Beacon.Models.BeaconListResponse
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Here we can see a list of beacons received.</p>
+    
+    <p>
+        <ul>
+            @foreach (var beacon in Model.Beacons)
+            {
+                <li>@beacon</li>
+            }
+        </ul>
+    </p>
+    
+</div>
