@@ -1,0 +1,1 @@
+# TopSwagCode.AspNetCore.Beacon
