@@ -32,7 +32,7 @@ Yes! (Not in IE) :)
 
 ![Sample app](beacons.gif)
 
-So I built this small sample AspNetCore 3.0 MVC site, showing each load / unload event. You could really log whatever you want like mouse over events, click events, mouse movement, etc.
+So I built this small sample AspNetCore 3.0 MVC site, showing how I log each load / unload event. You could really log whatever you want like mouse over events, click events, mouse movement, etc.
 
 You can be as creative as you like. I made some logic to update session data for a user if the user logs in during their use of the website.
 
