@@ -9,7 +9,7 @@ Mozillia describes it as:
 >
 >Beacon requests use HTTP POST and do not require a response.
 >Beacon requests are guaranteed to be initiated before the page >unloads.
->See Beacon API for an overview [here.](https://developer.mozilla.org/>en-US/docs/Web/API/Beacon_API)
+>See Beacon API for an overview [here.](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API)
 
 Simply said a smart way for sending small chunks of data to your server, in a way that does not slow down user and is guaranteed to send even when the user closes the browser or goes to other websites. 
 
