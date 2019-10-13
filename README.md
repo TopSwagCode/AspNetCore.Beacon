@@ -11,11 +11,11 @@ Mozillia describes it as:
 >Beacon requests are guaranteed to be initiated before the page >unloads.
 >See Beacon API for an overview [here.](https://developer.mozilla.org/>en-US/docs/Web/API/Beacon_API)
 
-Simply said a smart way for sending small chuncks of data to your server, in a way that does not slow down user and is guaranteed to sent even when the user closes the browser or goes to other websites. 
+Simply said a smart way for sending small chunks of data to your server, in a way that does not slow down user and is guaranteed to send even when the user closes the browser or goes to other websites. 
 
 # What can I use it for?
 
-I won't write a lengthy blog post about it. Plenty of people has already done that. You can read a fine blog post for it [here.](https://www.smashingmagazine.com/2018/07/logging-activity-web-beacon-api/)
+I won't write a lengthy blog post about it. Plenty of people have already done that. You can read a fine blog post for it [here.](https://www.smashingmagazine.com/2018/07/logging-activity-web-beacon-api/)
 
 TLDR:
 * Tracking stats and analytics data
@@ -28,7 +28,7 @@ Yes! (Not in IE) :)
 
 [https://caniuse.com/#feat=beacon](https://caniuse.com/#feat=beacon)
 
-# Less talk more Gif's
+# Less talk more Gif
 
 ![Sample app](beacons.gif)
 
