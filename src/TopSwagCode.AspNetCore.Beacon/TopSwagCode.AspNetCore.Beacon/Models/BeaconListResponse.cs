@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using TopSwagCode.AspNetCore.Beacon.Data;
 
 namespace TopSwagCode.AspNetCore.Beacon.Models
 {
     public class BeaconListResponse
     {
-        public List<string> Beacons { get; set; }
+        public List<SessionAnalytic> Beacons { get; set; }
     }
 }

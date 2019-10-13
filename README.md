@@ -1,35 +1,89 @@
 # TopSwagCode.AspNetCore.Beacon
 
+This is a small sample project showing how to use Beacons with AspNetCore built on top of default WebAPI template using Individual authentication.
+
 # What is it?
-https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API/Using_the_Beacon_API
 
-The Beacon interface schedules an asynchronous and non-blocking request to a web server.
+Mozillia describes it as: 
+>The Beacon interface schedules an asynchronous and non-blocking >request to a web server.
+>
+>Beacon requests use HTTP POST and do not require a response.
+>Beacon requests are guaranteed to be initiated before the page >unloads.
+>See Beacon API for an overview [here.](https://developer.mozilla.org/>en-US/docs/Web/API/Beacon_API)
 
-Beacon requests use HTTP POST and do not require a response.
-Beacon requests are guaranteed to be initiated before the page unloads.
-This document contains examples of the Beacon interfaces. See Beacon API for an overview.
+Simply said a smart way for sending small chuncks of data to your server, in a way that does not slow down user and is guaranteed to sent even when the user closes the browser or goes to other websites. 
 
-https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API
+# What can I use it for?
+
+I won't write a lengthy blog post about it. Plenty of people has already done that. You can read a fine blog post for it [here.](https://www.smashingmagazine.com/2018/07/logging-activity-web-beacon-api/)
+
+TLDR:
+* Tracking stats and analytics data
+* Debugging and logging
+* Whatever brilliant plans you might have for it :)
 
 # Can I use it?
 
 Yes! (Not in IE) :)
 
-https://caniuse.com/#feat=beacon
+[https://caniuse.com/#feat=beacon](https://caniuse.com/#feat=beacon)
 
-# Alternatives
+# Less talk more Gif's
 
-Google analytics. If you like sharing all your data with your big brother :P (You know he can't keep a secret)
+![Sample app](beacons.gif)
 
-# Further ideas
+So I built this small sample AspNetCore 3.0 MVC site, showing each load / unload event. You could really log whatever you want like mouse over events, click events, mouse movement, etc.
 
-You could store session cookie with UID and track user from start to end.
-Have a different table to store user identity if user login during their visit, so we can attach the logs to a given state.
+You can be as creative as you like. I made some logic to update session data for a user if the user logs in during their use of the website.
 
+There was some gotchas while creating this sample repository. This project uses Text/Plain post messages to receive the Beacon messages, because there is a bug that you can find [here.](https://bugs.chromium.org/p/chromium/issues/detail?id=490015 ) The bug is regarding CORS for other content types. So for now stick to Text/Plain and simply parse the json serversides afterwards.
 
-# TODO
+It was pretty easy to implement after that bug was found.
 
-* More details in readme and images and memes :D
-* Migrations run
-* Guide how to run this project and how it was created
-* Perhaps a blog post?
+Frontend:
+
+``` javascript
+    window.onload = window.onunload = function analytics(event) {
+        var data = {
+                    "state": event.type,
+                    "location": location.href,
+                    "sessionUid": getSessionUid(), // Homebrew
+                    "userTime": moment().format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')  // momentJS to get DateTimeOffset
+                };
+
+        if (!navigator.sendBeacon) return;
+
+        navigator.sendBeacon(url, JSON.stringify(data));
+
+    }
+```
+
+Backend:
+
+``` csharp
+    [HttpPost]
+    public async Task Post()
+    {
+        using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
+        var json = await reader.ReadToEndAsync();
+        
+        _logger.LogDebug(json);
+        
+        var beaconRequest = System.Text.Json.JsonSerializer.Deserialize<BeaconRequest>(json);
+
+        string userId = string.Empty;
+        
+        if(User.Identity.IsAuthenticated)
+        {
+            userId = User.FindFirstValue(ClaimTypes.Name);
+        }
+
+        _analyticsService.InsertAnalytics(beaconRequest, userId);
+    }
+```
+
+You can go as crazy as you want :) 
+
+# Supported by:
+
+[![https://www.jetbrains.com/?from=TopSwagCode](jetbrains.svg)](https://www.jetbrains.com/?from=TopSwagCode)

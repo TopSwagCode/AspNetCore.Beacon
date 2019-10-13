@@ -1,29 +1,51 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TopSwagCode.AspNetCore.Beacon.Data;
+using TopSwagCode.AspNetCore.Beacon.Models;
 
 namespace TopSwagCode.AspNetCore.Beacon.Services
 {
-
-    public interface IAnalyticsService
-    {
-        Task InsertAnalytics(Analytic analytic);
-    }
-    
     public class AnalyticsService : IAnalyticsService
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly InmemoryAnalytics _inMemoryAnalytics;
 
-        public AnalyticsService(ApplicationDbContext dbContext)
+        public AnalyticsService()
         {
-            _dbContext = dbContext;
+            _inMemoryAnalytics = InmemoryAnalytics.GetInstance();
         }
 
-        public async Task InsertAnalytics(Analytic analytic)
+        public void InsertAnalytics(BeaconRequest beaconRequest, string userId = "")
         {
-            _dbContext.Analytics.Add(analytic);
+            var sessionAnalytic = _inMemoryAnalytics.SessionAnalytics.SingleOrDefault(x => x.SessionUid == beaconRequest.SessionUid);
 
-            await _dbContext.SaveChangesAsync();
+            if (sessionAnalytic == null)
+            {
+                sessionAnalytic = new SessionAnalytic
+                {
+                    SessionUid = beaconRequest.SessionUid,
+                };
+                
+                _inMemoryAnalytics.SessionAnalytics.Add(sessionAnalytic);
+            }
 
+            if (string.IsNullOrEmpty(sessionAnalytic.UserId) && string.IsNullOrEmpty(userId) == false)
+            {
+                sessionAnalytic.UserId = userId;
+            }
+            
+            sessionAnalytic.Analytics.Add(new Analytic
+            {
+                State = beaconRequest.State,
+                UserTime = beaconRequest.UserTime,
+                Location = beaconRequest.Location,
+            });
+        }
+
+        public List<SessionAnalytic> GetAnalytics()
+        {
+            return _inMemoryAnalytics.SessionAnalytics;
         }
     }
 }

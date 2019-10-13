@@ -9,12 +9,17 @@
     <p>Here we can see a list of beacons received.</p>
     
     <p>
-        <ul>
-            @foreach (var beacon in Model.Beacons)
-            {
-                <li>@beacon</li>
-            }
-        </ul>
+        @foreach (var sessionAnalytic in Model.Beacons)
+        {
+            <h3>SessionUid: @sessionAnalytic.SessionUid</h3>
+            <h3>User: @(string.IsNullOrEmpty(sessionAnalytic.UserId) ? "Unknown user" : sessionAnalytic.UserId )</h3>
+            <ul>
+                @foreach (var analytic in sessionAnalytic.Analytics)
+                {
+                    <li>@analytic.ToString()</li> 
+                }
+            </ul>
+        }
     </p>
     
 </div>

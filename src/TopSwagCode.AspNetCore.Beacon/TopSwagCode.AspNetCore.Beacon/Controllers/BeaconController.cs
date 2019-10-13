@@ -27,13 +27,12 @@ namespace TopSwagCode.AspNetCore.Beacon.Controllers
             _analyticsService = analyticsService;
         }
 
+        [HttpGet]
         public ActionResult<BeaconListResponse> Index()
         {
-            _logger.LogWarning("Wrong Endpoint hit");
-
             var response = new BeaconListResponse
             {
-                Beacons = new List<string>(){"Test beacon 1", "Test beacon 2"}
+                Beacons = _analyticsService.GetAnalytics()
             };
 
             return View(response);
@@ -51,18 +50,12 @@ namespace TopSwagCode.AspNetCore.Beacon.Controllers
 
             string userId = string.Empty;
             
-            if(!User.Identity.IsAuthenticated)
+            if(User.Identity.IsAuthenticated)
             {
-                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                userId = User.FindFirstValue(ClaimTypes.Name);
             }
 
-            await _analyticsService.InsertAnalytics(new Analytic
-            {
-                State = beaconRequest.State,
-                SessionUid = beaconRequest.SessionUid,
-                UserTime =  beaconRequest.UserTime
-                // Server time?
-            });
+            _analyticsService.InsertAnalytics(beaconRequest, userId);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
