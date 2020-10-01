@@ -1,4 +1,4 @@
-# TopSwagCode.AspNetCore.Beacon
+# AspNetCore.Beacon
 
 This is a small sample project showing how to use Beacons with AspNetCore built on top of default WebAPI template using Individual authentication.
 
